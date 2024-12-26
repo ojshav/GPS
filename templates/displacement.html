@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Vehicle Monitoring App</title>
+</head>
+<body>
+    <h1>Vehicle Monitoring Application</h1>
+
+    <form action="/immobilize" method="post">
+        <h2>Immobilize Vehicle</h2>
+        <input type="text" name="tracker_id" placeholder="Enter Tracker ID" required>
+        <button type="submit">Immobilize</button>
+    </form>
+
+    <form action="/poi" method="post">
+        <h2>Check Points of Interest</h2>
+        <input type="text" name="tracker_id" placeholder="Enter Tracker ID" required>
+        <button type="submit">Check POIs</button>
+    </form>
+
+    <form action="/displacement" method="post">
+        <h2>Check Displacement</h2>
+        <button type="submit">Check Displacement</button>
+    </form>
+
+    <h1>Displacement Results</h1>
+    
+    {% if results %}
+        <table border="1">
+            <tr>
+                <th>Tracker ID</th>
+                <th>Previous Address</th>
+                <th>Current Address</th>
+                <th>Distance (km)</th>
+                <th>Previous Location</th>
+                <th>Current Location</th>
+            </tr>
+            {% for result in results %}
+                <tr>
+                    <td>{{ result.tracker_id }}</td>
+                    <td>{{ result.previous_address }}</td>
+                    <td>{{ result.current_address }}</td>
+                    <td>{{ result.distance_km }}</td>
+                    <td>{{ result.prev_location }}</td>
+                    <td>{{ result.current_location }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No displacements detected.</p>
+    {% endif %}
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    {% if nearby_vehicles %}
+        <h3>Nearby Vehicles:</h3>
+        <ul>
+            {% for vehicle in nearby_vehicles %}
+                <li>{{ vehicle }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    <!-- Other sections of your template can go here -->
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POI Results</title>
+</head>
+<body>
+    <h1>Nearby Vehicles and POIs</h1>
+    {% if nearby_vehicles %}
+        <ul>
+            {% for vehicle in nearby_vehicles %}
+                <li>
+                    Tracker ID: {{ vehicle.tracker_id }} <br>
+                    Vehicle Location: {{ vehicle.location }} <br>
+                    POI: {{ vehicle.poi }} <br>
+                    Distance: {{ vehicle.distance_km }} km
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No vehicles found near the POIs.</p>
+    {% endif %}
+    <a href="{{ map_file }}" target="_blank">View POIs Map</a>
+</body>
+</html>
