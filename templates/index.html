@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Vehicle Monitoring App</title>
+</head>
+<body>
+    <h1>Vehicle Monitoring Application</h1>
+
+    <form action="/immobilize" method="post">
+        <h2>Immobilize Vehicle</h2>
+        <input type="text" name="tracker_id" placeholder="Enter Tracker ID" required>
+        <button type="submit">Immobilize</button>
+    </form>
+
+    <form action="/poi" method="POST">
+        <h2>Check Points of Interest</h2>
+        <input type="text" name="location" placeholder="Enter location" required>
+        <button type="submit">Find POIs</button>
+    </form>
+
+    <form action="/displacement" method="post">
+        <h2>Check Displacement</h2>
+        <button type="submit">Check Displacement</button>
+    </form>
+
+    <form action="/speed_alarm" method="post">
+        <h2>Speed Alarm</h2>
+        <input type="number" name="speed_limit" placeholder="Enter Speed Limit" required>
+        <button type="submit">Check Speed</button>
+    </form>
+
+    <form action="/power_failure" method="post">
+        <h2>Power Failure Alarm</h2>
+        <button type="submit">Check Power Failures</button>
+    </form>
+
+    <form action="/geofencing" method="post">
+        <h2>Geo-fencing</h2>
+        <input type="text" name="tracker_id" placeholder="Enter Tracker ID" required>
+        <button type="submit">Check Geo-fencing</button>
+    </form>
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    <!-- New section for displaying results in a table -->
+    {% if tracker_results %}
+        <h3>Tracker Results:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for field, value in tracker_results.items() %}
+                    <tr>
+                        <td>{{ field }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <!-- New section for displaying map in geofencing -->
+    {% if geo_fencing_map %}
+        <h3>Geo-fencing Map:</h3>
+        <div id="map">
+            <!-- Assuming you have a way to render the map here -->
+            {{ geo_fencing_map|safe }}
+        </div>
+    {% endif %}
+
+    {% if nearby_vehicles %}
+        <h3>Nearby Vehicles:</h3>
+        <ul>
+            {% for vehicle in nearby_vehicles %}
+                <li>{{ vehicle }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if alerts %}
+        <h3>Displacement Alerts:</h3>
+        <ul>
+            {% for alert in alerts %}
+                <li>{{ alert }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if violations %}
+        <h3>Speed Violations:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tracker ID</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Speed</th>
+                    <th>Timestamp</th>
+                    <th>Status</th>
+                    <th>Power Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for violation in violations %}
+                    <tr>
+                        <td>{{ violation.id }}</td>
+                        <td>{{ violation.tracker_id }}</td>
+                        <td>{{ violation.latitude }}</td>
+                        <td>{{ violation.longitude }}</td>
+                        <td>{{ violation.speed }}</td>
+                        <td>{{ violation.timestamp }}</td>
+                        <td>{{ violation.status }}</td>
+                        <td>{{ violation.power_status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if power_failures %}
+        <h3>Power Failures:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tracker ID</th>
+                    <th>Timestamp</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for failure in power_failures %}
+                    <tr>
+                        <td>{{ failure.id }}</td>
+                        <td>{{ failure.tracker_id }}</td>
+                        <td>{{ failure.timestamp }}</td>
+                        <td>{{ failure.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if geo_fence_violations %}
+        <h3>Geo-fence Violations:</h3>
+        <ul>
+            {% for violation in geo_fence_violations %}
+                <li>{{ violation }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <!-- New section for displaying Displacement Alerts in a table -->
+    {% if displacement_alerts %}
+        <h3>Displacement Alerts:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tracker ID</th>
+                    <th>Previous Location (Latitude)</th>
+                    <th>Previous Location (Longitude)</th>
+                    <th>Current Location (Latitude)</th>
+                    <th>Current Location (Longitude)</th>
+                    <th>Displacement (km)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alert in displacement_alerts %}
+                    <tr>
+                        <td>{{ alert.id }}</td>
+                        <td>{{ alert.tracker_id }}</td>
+                        <td>{{ alert.prev_location[0] }}</td>
+                        <td>{{ alert.prev_location[1] }}</td>
+                        <td>{{ alert.current_location[0] }}</td>
+                        <td>{{ alert.current_location[1] }}</td>
+                        <td>{{ alert.displacement_km }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</body>
+</html>
