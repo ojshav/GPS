@@ -1,0 +1,7 @@
+pandas
+faker
+folium
+db-sqlite3
+haversine
+flask
+geopy 
